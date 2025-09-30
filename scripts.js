@@ -1,29 +1,41 @@
 let baseCostNoelito = 10;
-let multiplierNoelito = 1.00;
 let numberOfNoelitos = 0;
+let bonuses = 0;
+let currentCount = 0;
 
-function counterAdd(){
-    var counterText = document.getElementById("counter-text");
-    var currentCount = parseInt(counterText.innerText.split(": ")[1]);
-    currentCount++;
-    counterText.innerText = "Noels: " + currentCount;
+const passiveIncome = () => {
+    currentCount += bonuses;
+    currentCount = Math.floor(currentCount * 100) / 100; // Round to 2 decimal places
+    document.getElementById("counter-text").innerText = "Noels: " + currentCount;
 }
 
-function buyNoelito(){
-    var counterText = document.getElementById("counter-text");
-    var currentCount = parseInt(counterText.innerText.split(": ")[1]);
+function start(){
+    setInterval(passiveIncome, 1000);
+}
+
+function counterAdd() {
+    currentCount++;
+    currentCount = Math.floor(currentCount * 100) / 100; // Round to 2 decimal places
+    document.getElementById("counter-text").innerText = "Noels: " + currentCount;
+}
+
+function buyNoelito() {
     if (currentCount >= baseCostNoelito) {
         currentCount -= baseCostNoelito;
-        counterText.innerText = "Noels: " + currentCount;
-        multiplierNoelito += 0.15;
+        currentCount = Math.floor(currentCount * 100) / 100; // Round to 2 decimal places
+        document.getElementById("counter-text").innerText = "Noels: " + currentCount;
+
         baseCostNoelito = Math.floor(baseCostNoelito * 1.30);
+        document.getElementById("noelitoPrice").innerText = baseCostNoelito + " Noels";
+
         numberOfNoelitos++;
         document.getElementById("helpers")
-            .insertAdjacentHTML("afterend",
-                `<div id="noelito` +  numberOfNoelitos + `">
+            .insertAdjacentHTML("beforeend",
+                `<div id="noelito` + numberOfNoelitos + `">
                     <img src="./images/noelito.gif" alt="">
                 </div>`
             )
+        bonuses += 0.20;
     } else {
         alert("Not enough Noels!");
     }
